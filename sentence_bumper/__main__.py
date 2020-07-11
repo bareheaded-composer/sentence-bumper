@@ -59,14 +59,14 @@ def get_category():
             verbose("  数量：%d" % len(sentences))
             verbose("  更新时间：%s" % category["updated_at"])
 
-            CATAGORIES[category["key"]] = category["path"]
+            CATAGORIES[category["key"]] = { "size": len(sentences), "path": category["path"] }
 
 
 def get_random_sentence(category_key: str):
     if category_key not in CATAGORIES.keys():
         raise Exception("'%s' is not a valid catagory key!" % category_key)
 
-    with open(BUNDLE_PATH + '/sentences/' + category_key + ".json") as sentences_file:
+    with open(BUNDLE_PATH + '/' + CATAGORIES[category_key]["path"]) as sentences_file:
         sentences = json.loads(sentences_file.read())
         return random.choice(sentences)
 
@@ -94,7 +94,7 @@ def main():
             raise Exception("catagory argument is missing!")
 
     if category == "":
-        category = random.choice(list(CATAGORIES.keys()))
+        category = random.choices(list(CATAGORIES.keys()), weights=list([x["size"] for x in CATAGORIES.values()]))[0]
 
     random_sentence = get_random_sentence(category)
 

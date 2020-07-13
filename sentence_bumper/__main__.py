@@ -91,7 +91,7 @@ def main():
         try:
             category = argv[argv.index('--category') + 1]
         except IndexError:
-            raise Exception("catagory argument is missing!")
+            raise Exception("category argument is missing!")
 
     if category == "":
         category = random.choices(list(CATAGORIES.keys()), weights=list([x["size"] for x in CATAGORIES.values()]))[0]
